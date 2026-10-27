@@ -23,9 +23,30 @@ The source code is private. This repo shows what the project is and how it was b
 
 I'm the sole developer. I designed the app and directed AI-assisted development with Claude Code, often with several agents working in parallel.
 
-- Tuned the shot detector with hand-labeled shot data analyzed in SPSS. Red dominance and local contrast beat raw brightness.
+- Started as a Mac prototype in Python and NumPy, used to test detection ideas on saved images and live camera video. The iPhone detector was then built to match that Python reference, and Python tests still check the two agree.
+- Tuned the shot detector with hand-labeled shot data, CSV exports and statistical analysis in SPSS. Red dominance and local contrast beat raw brightness.
 - About 2,700 automated tests, TestFlight betas and on-device validation before each release.
 - Published the privacy policy and terms, and ran the App Store release.
+
+## Architecture
+
+- Native iOS app in Swift and SwiftUI, built in Xcode.
+- AVFoundation camera capture at 60 frames per second, with a 1080p60 path on newer iPhones.
+- Image processing with Core Graphics, Core Image, Vision and Accelerate (vDSP).
+- StoreKit for in-app purchase.
+- Separate public and internal builds. The internal build adds diagnostics such as missed-shot capture, frame replay and support bundle export.
+- XCTest unit and UI test plans, with TestFlight builds and on-device validation before release.
+
+## Detection pipeline
+
+Real-time computer vision, run on every camera frame. It is more than a color threshold.
+
+- Temporal pulse gating picks out the few frames that need heavier analysis.
+- HSV and red dominance masks isolate laser-like pixels, and local contrast rejects bright paper, glare and target ink.
+- Connected-component analysis scores each blob by size, shape, brightness and color.
+- Center refinement finds the true center of rings, hollow centers and overexposed hits.
+- Homography alignment maps each hit onto the printed target, so scoring and distance are measured in millimeters.
+- Target-aware filtering and scene memory suppress hits off the page and reflections that keep showing up in the same spot.
 
 ## The rest of the project (also private)
 
