@@ -27,8 +27,29 @@ I'm the sole developer. I designed the app and directed AI-assisted development 
 - About 2,700 automated tests, TestFlight betas and on-device validation before each release.
 - Published the privacy policy and terms, and ran the App Store release.
 
-## Supporting tools (also private)
+## The rest of the project (also private)
 
-- **Website.** peregrinedryfire.com, deployed on Netlify with a scripted Git publish and regression tests.
-- **Peregrine HQ.** A dashboard that pulls downloads, revenue, search and ad data once a day through GitHub Actions and the Appfigures MCP server.
-- **Reddit Radar.** Finds Reddit threads about dry fire training every day and opens a GitHub issue with them. It never posts. I read every thread and reply by hand.
+### Website
+
+[peregrinedryfire.com](https://peregrinedryfire.com) is the app's public home. It has the walkthrough video, how it works, the gear you need, pricing, support, a press kit, the privacy policy and terms, and landing pages written for search.
+
+- Plain HTML, CSS and JavaScript, hosted on Netlify.
+- A publish script builds a clean public copy from the editing copy, so only the pages and images the site uses go live.
+- An in-page editor lets me change text, fonts and layout without opening the code.
+- Browser tests check the layout at phone and desktop sizes and guard the editor against regressions.
+
+### Peregrine HQ
+
+A private dashboard with every number for the business in one place: downloads, sales, search traffic, site visits, ads and social.
+
+- Once a day GitHub Actions pulls the data from each source's API, with Appfigures read through its official MCP server, and writes one snapshot.
+- A Claude routine republishes the dashboard from that snapshot, and I can ask Claude questions about any of it.
+- Every Monday it rereads the API docs and changelogs the project depends on. If something changed, it opens a GitHub issue.
+
+### Reddit Radar
+
+Finds Reddit threads about dry fire training that are worth a reply.
+
+- Twice a day GitHub Actions searches the watched subreddits in parallel jobs, filters on keyword matches, drops threads it has already seen and opens a GitHub issue with the rest.
+- It keeps each subreddit's posting rules on file and refreshes them monthly, so I can check a sub's rules before replying.
+- It never posts and holds no posting credential. I read every thread and reply by hand.
